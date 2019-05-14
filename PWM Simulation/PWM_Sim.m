@@ -30,8 +30,11 @@ figure(1)
 % Representation of the Sinusoidal Signal
 % subplot(4,1,1)
 subplot(3,1,1)
-plot(t,Sin,'black')
-xlabel('Time'), xlim([0 0.5])
+hold on
+plot(t,Sin,'black','LineWidth',2)
+plot(t,Tri)
+hold off
+xlabel('Time'), xlim([0 0.1])
 ylabel('Amplitude'), ylim([min(Sin) max(Sin)])
 title('Message Signal'), legend('Message Signal')
 grid minor
@@ -47,10 +50,10 @@ plot(t,Tri)
 
 % Representation of the PWM Signal
 % subplot(4,1,3);
-plot(t,PWM,'red')
+plot(t,PWM,'red','LineWidth',2)
 hold off
-xlabel('Sample'), xlim([0 0.5])
-ylabel('Amplitude'), ylim([min(Tri+2) max(Tri-2)])
+xlabel('Sample'), xlim([0 0.1])
+ylabel('Amplitude'), ylim([min(Tri) max(Tri)])
 title('PWM Signal'), legend('PWM Signal')
 % axis([0 1 -1 2])
 grid minor

@@ -9,10 +9,12 @@ t = 0:0.001:1;      % time interval
 fTri = 120;         % Triangular frequency
 fSin = 120;         % Sinusoidal frequency
 a = 10;             % amplitude of Triangular
-b = 5;              % amplitude of Sinusoidal -- less than value of a
+b = 10;             % amplitude of Sinusoidal -- less than value of a
+thetaTri = -pi/2;
+thetaSin = -pi/2;
 
-Tri = a.*sawtooth(2*pi*fTri*t);    % Triangular signal
-Sin = b.*sin(2*pi*fSin*t);         % Sinusoidal signal
+Tri = a.*sawtooth(2*pi*fTri*t+thetaTri);    % Triangular signal
+Sin = b.*sin(2*pi*fSin*t+thetaSin);         % Sinusoidal signal
 L = length(Tri);
 
 % Simulation loop
@@ -28,7 +30,10 @@ figure(1)
 % Representation of the Sinusoidal Signal
 % subplot(4,1,1)
 subplot(3,1,1)
-plot(t,Sin,'black')
+hold on
+plot(t,Sin,'black','LineWidth',5)
+plot(t,Tri)
+hold off
 xlabel('Time'), xlim([0 0.5])
 ylabel('Amplitude'), ylim([min(Sin) max(Sin)])
 title('Message Signal'), legend('Message Signal')
@@ -45,7 +50,7 @@ plot(t,Tri)
 
 % Representation of the PWM Signal
 % subplot(4,1,3);
-plot(t,PWM,'red')
+plot(t,PWM,'red','LineWidth')
 hold off
 xlabel('Sample'), xlim([0 0.5])
 ylabel('Amplitude'), ylim([min(Tri+2) max(Tri-2)])
