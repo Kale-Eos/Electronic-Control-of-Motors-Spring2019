@@ -7,12 +7,14 @@ clc, clear all, close all;
 % Variables
 t = 0:0.001:1;      % time interval
 fTri = 120;         % Triangular frequency
-fSin = 100;         % Sinusoidal frequency
+fSin = 120;         % Sinusoidal frequency
 a = 10;             % amplitude of Triangular
-b = 5;              % amplitude of Sinusoidal -- less than value of a
+b = 10;             % amplitude of Sinusoidal -- less than value of a
+thetaTri = -pi/2;
+thetaSin = -pi/2;
 
-Tri = a.*sawtooth(2*pi*fTri*t);    % Triangular signal
-Sin = b.*sin(2*pi*fSin*t);         % Sinusoidal signal
+Tri = a.*sawtooth(2*pi*fTri*t+thetaTri);    % Triangular signal
+Sin = b.*sin(2*pi*fSin*t+thetaSin);         % Sinusoidal signal
 L = length(Tri);
 
 % Simulation loop
@@ -25,15 +27,16 @@ for i = 1:L
 end
 
 figure(1)
-% Representation of the Message Signal
+% Representation of the Sinusoidal Signal
 % subplot(4,1,1)
 subplot(3,1,1)
 plot(t,Sin,'black')
-xlabel('Time'), ylabel('Amplitude')
+xlabel('Time'), xlim([0 0.5])
+ylabel('Amplitude'), ylim([min(Sin) max(Sin)])
 title('Message Signal'), legend('Message Signal')
 grid minor
 
-% Representation of the Carrier Signal
+% Representation of Triangular Signal
 % subplot(4,1,2)
 subplot(3,1,2)
 hold on
@@ -46,8 +49,8 @@ plot(t,Tri)
 % subplot(4,1,3);
 plot(t,PWM,'red')
 hold off
-xlabel('Sample'), ylabel('Amplitude')
-xlim([0 0.5]), ylim([min(Tri+2) max(Tri-2)])
+xlabel('Sample'), xlim([0 0.5])
+ylabel('Amplitude'), ylim([min(Tri+2) max(Tri-2)])
 title('PWM Signal'), legend('PWM Signal')
 % axis([0 1 -1 2])
 grid minor
