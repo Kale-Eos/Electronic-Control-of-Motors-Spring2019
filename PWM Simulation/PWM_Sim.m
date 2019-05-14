@@ -26,29 +26,36 @@ end
 
 figure(1)
 % Representation of the Message Signal
-subplot(4,1,1)
+% subplot(4,1,1)
+subplot(3,1,1)
 plot(t,Sin,'black')
 xlabel('Time'), ylabel('Amplitude')
 title('Message Signal'), legend('Message Signal')
 grid minor
 
 % Representation of the Carrier Signal
-subplot(4,1,2)
+% subplot(4,1,2)
+subplot(3,1,2)
+hold on
 plot(t,Tri)
-xlabel('Sample'), ylabel('Amplitude')
-title('Carrier Signal'), legend('Carrier Signal')
-grid minor
+% xlabel('Sample'), ylabel('Amplitude')
+% title('Carrier Signal'), legend('Carrier Signal')
+% grid minor
 
 % Representation of the PWM Signal
-subplot(4,1,3);
+% subplot(4,1,3);
 plot(t,PWM,'red')
+hold off
 xlabel('Sample'), ylabel('Amplitude')
+xlim([0 0.5]), ylim([min(Tri+2) max(Tri-2)])
 title('PWM Signal'), legend('PWM Signal')
-axis([0 1 -1 2]), grid minor
+% axis([0 1 -1 2])
+grid minor
 
 % Power Spectral Density
 Welch = pwelch(PWM);
-subplot(4,1,4)
+% subplot(4,1,4)
+subplot(3,1,3)
 plot(Welch)
 xlabel('Sample'), ylabel('Amplitude')
 title('PWM Power Spectral Density'), legend('Power Spectral Density')
