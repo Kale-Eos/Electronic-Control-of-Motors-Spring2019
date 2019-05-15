@@ -36,19 +36,21 @@ for i = 1:L
     if (Sin(i) > Tri(i))
         PWM(i) = -1;     % if M value is greater than C return pulse
     else
-        PWM(i) = 1;     % else return null signal
+        PWM(i) = 1;     % else return positive PWM signal
     end
 end
 
 figure('Name','PWM Signal Generation and Output Representation'),figure(1)
+
 % Representation of the Sinusoidal Signal
 subplot(3,1,1)
 hold on
 plot(t,Sin,'black','LineWidth',2)
 plot(t,Tri)
 hold off
-xlabel('Time (Snapshot)'), xlim([0 0.1])
-ylabel('Amplitude'), ylim([min(Sin) max(Sin)])
+xlabel('Time (Snapshot)')
+xlim([0 0.1])   % may be adjusted based on various input scenarios
+ylabel('Amplitude'), % ylim([min(Sin) max(Sin)])
 title('Message Signal'), legend('Message Signal','Triangular Signal')
 grid minor, box on
 
@@ -58,7 +60,8 @@ hold on
 plot(t,Tri)
 plot(t,PWM,'red','LineWidth',2)
 hold off
-xlabel('Sample (Snapshot)'), xlim([0 0.1])
+xlabel('Sample (Snapshot)')
+xlim([0 0.1])   % may be adjusted based on various input scenarios
 ylabel('Amplitude'), ylim([min(Tri) max(Tri)])
 title('PWM Signal Output'), legend('Triangular Signal','PWM Signal')
 grid minor, box on
@@ -68,14 +71,14 @@ Welch = pwelch(PWM);    % allocation of Welch's PSD estimate
 subplot(3,1,3)
 plot(Welch)
 xlabel('Sample'), ylabel('Amplitude')
-title('PWM Power Spectral Density')
-legend('Power Spectral Density','Max PSD Value')
-grid minor
+title('PWM Power Spectral Density'), legend('Power Spectral Density')
+grid minor, box on
 
-PS
+PSD_Min = min(Welch);   % Power Spectral Density Absolute Min 
+PSD_Max = max(Welch);   % 
 
-figure('Name','Spectragram Evaluations'),figure(2)
 % Spectrogram representations
+figure('Name','Spectragram Evaluations'),figure(2)
 subplot(3,1,1)
 spectrogram(t,Sin)                      % time versus Sinusoid
 title('Sinusoid Signal Spectrogram')

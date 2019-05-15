@@ -26,9 +26,11 @@ Sin = aSin.*sin(2*pi*fSin*t+thetaSin);          % Sinusoidal signal
 L = length(Tri);
 
 % need to eval following:
-% V1 voltage input with input frequency
-% THD total harmonic distortion
-% Power reflective of load
+% Vdc - source voltage
+% V1 - amplitude of fundamental frequency
+% FundF
+% THD - total harmonic distortion
+% Power - reflective of load
 % R-load and L-Load for inverter based systems 
 
 % Simulation loop
@@ -36,7 +38,7 @@ for i = 1:L
     if (Sin(i) > Tri(i))
         PWM(i) = -1;     % if M value is greater than C return pulse
     else
-        PWM(i) = 1;     % else return null signal
+        PWM(i) = 1;     % else return positive PWM signal
     end
 end
 
@@ -44,10 +46,8 @@ figure('Name','PWM Signal Generation and Output Representation'),figure(1)
 
 % Representation of the Sinusoidal Signal
 subplot(3,1,1)
-hold on
-plot(t,Sin,'black','LineWidth',2)
-plot(t,Tri)
-hold off
+hold on, plot(t,Sin,'black','LineWidth',2)
+plot(t,Tri), hold off
 xlabel('Time (Snapshot)')
 xlim([0 0.1])   % may be adjusted based on various input scenarios
 ylabel('Amplitude'), % ylim([min(Sin) max(Sin)])
@@ -56,10 +56,8 @@ grid minor, box on
 
 % Representation of Triangular Signal
 subplot(3,1,2)
-hold on
-plot(t,Tri)
-plot(t,PWM,'red','LineWidth',2)
-hold off
+hold on, plot(t,Tri)
+plot(t,PWM,'red','LineWidth',2), hold off
 xlabel('Sample (Snapshot)')
 xlim([0 0.1])   % may be adjusted based on various input scenarios
 ylabel('Amplitude'), ylim([min(Tri) max(Tri)])
@@ -69,13 +67,13 @@ grid minor, box on
 % Power Spectral Density
 Welch = pwelch(PWM);    % allocation of Welch's PSD estimate
 subplot(3,1,3)
-plot(Welch)
+plot(Welch)             % Spectrum of PWelch returned values
 xlabel('Sample'), ylabel('Amplitude')
 title('PWM Power Spectral Density'), legend('Power Spectral Density')
 grid minor, box on
 
-PSD_Min = min(Welch);
-PSD_Max = max(Welch);
+PSD_Min = min(Welch);   % Power Spectral Density Absolute Min 
+PSD_Max = max(Welch);   % Power Spectral Density Absolute Max
 
 % Spectrogram representations
 figure('Name','Spectragram Evaluations'),figure(2)
