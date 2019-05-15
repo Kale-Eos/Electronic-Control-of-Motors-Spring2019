@@ -5,24 +5,29 @@
 clc, clear all, close all;
 
 % Variables
-t = 0:0.001:1;      % time interval and spacing
+fs = 1000;          % sampling frequency
+dt = 1/fs;          % differentional of time
+t = 0:dt:1-dt;      % time interval and spacing
 fTri = 120;         % Triangular frequency
 fSin = 120;         % Sinusoidal frequency
-a = 10;             % amplitude of Triangular
-b = 10;             % amplitude of Sinusoidal -- less than value of a
+aTri = 10;          % amplitude of Triangular
+aSin = 10;          % amplitude of Sinusoidal -- less than value of aTri
 thetaTri = -pi/2;   % Triangular phase delay
 thetaSin = -pi/2;   % Triangular phase delay
 
-Tri = a.*sawtooth(2*pi*fTri*t+thetaTri);    % Triangular signal
-Sin = b.*sin(2*pi*fSin*t+thetaSin);         % Sinusoidal signal
+mF = fTri/fSin;     % frequency modulation ratio
+mA = aTri/aSin;     % amplitude modulation ratio
+
+Tri = aTri.*sawtooth(2*pi*fTri*t+thetaTri);     % Triangular signal
+Sin = aSin.*sin(2*pi*fSin*t+thetaSin);          % Sinusoidal signal
 L = length(Tri);
 
 % Simulation loop
 for i = 1:L
-    if (Sin(i) >= Tri(i))
-        PWM(i) = 1;     % if M value is greater than C return pulse
+    if (Sin(i) > Tri(i))
+        PWM(i) = -1;     % if M value is greater than C return pulse
     else
-        PWM(i) = 0;     % else return null signal
+        PWM(i) = 1;     % else return null signal
     end
 end
 
