@@ -4,23 +4,32 @@
 
 clc, clear all, close all;
 
-% Variables
+% Variables (temp values, change if must)
 fs = 1000;          % sampling frequency
 dt = 1/fs;          % differentional of time
 t = 0:dt:1-dt;      % time interval and spacing
-fTri = 120;         % Triangular frequency
-fSin = 120;         % Sinusoidal frequency
+
+fTri = 120;         % Triangular frequency (amplitude)
+fSin = 120;         % Sinusoidal frequency (amplitude)
 aTri = 10;          % amplitude of Triangular
 aSin = 10;          % amplitude of Sinusoidal -- less than value of aTri
 thetaTri = -pi/2;   % Triangular phase delay
 thetaSin = -pi/2;   % Triangular phase delay
 
+% Signal ratios 
 mF = fTri/fSin;     % frequency modulation ratio
-mA = aTri/aSin;     % amplitude modulation ratio
+mA = aSin/aTri;     % amplitude modulation ratio
 
+% Actual Signals
 Tri = aTri.*sawtooth(2*pi*fTri*t+thetaTri);     % Triangular signal
 Sin = aSin.*sin(2*pi*fSin*t+thetaSin);          % Sinusoidal signal
 L = length(Tri);
+
+% need to eval following:
+% V1 voltage input with input frequency
+% THD total harmonic distortion
+% Power reflective of load
+% R-load and L-Load for inverter based systems 
 
 % Simulation loop
 for i = 1:L
@@ -31,17 +40,19 @@ for i = 1:L
     end
 end
 
-figure(1)
+figure('Name','PWM Signal Generation and Output Representation'),figure(1)
+
 % Representation of the Sinusoidal Signal
 subplot(3,1,1)
 hold on
 plot(t,Sin,'black','LineWidth',2)
 plot(t,Tri)
 hold off
-xlabel('Time'), xlim([0 0.1])
-ylabel('Amplitude'), ylim([min(Sin) max(Sin)])
+xlabel('Time (Snapshot)')
+xlim([0 0.1])   % may be adjusted based on various input scenarios
+ylabel('Amplitude'), % ylim([min(Sin) max(Sin)])
 title('Message Signal'), legend('Message Signal','Triangular Signal')
-grid minor
+grid minor, box on
 
 % Representation of Triangular Signal
 subplot(3,1,2)
@@ -49,27 +60,31 @@ hold on
 plot(t,Tri)
 plot(t,PWM,'red','LineWidth',2)
 hold off
-xlabel('Sample'), xlim([0 0.1])
+xlabel('Sample (Snapshot)')
+xlim([0 0.1])   % may be adjusted based on various input scenarios
 ylabel('Amplitude'), ylim([min(Tri) max(Tri)])
 title('PWM Signal Output'), legend('Triangular Signal','PWM Signal')
-grid minor
+grid minor, box on
 
 % Power Spectral Density
-Welch = pwelch(PWM);
+Welch = pwelch(PWM);    % allocation of Welch's PSD estimate
 subplot(3,1,3)
 plot(Welch)
 xlabel('Sample'), ylabel('Amplitude')
 title('PWM Power Spectral Density'), legend('Power Spectral Density')
-grid minor
+grid minor, box on
 
-figure(2)
+PSD_Min = min(Welch);
+PSD_Max = max(Welch);
+
 % Spectrogram representations
+figure('Name','Spectragram Evaluations'),figure(2)
 subplot(3,1,1)
-spectrogram(t,PWM)
-title('PWM SPectrogram')
-subplot(3,1,2)
-spectrogram(t,Sin)
+spectrogram(t,Sin)                      % time versus Sinusoid
 title('Sinusoid Signal Spectrogram')
-subplot(3,1,3)
-spectrogram(t,Tri)
+subplot(3,1,2)
+spectrogram(t,Tri)                      % time versus Triangular
 title('Triangular Signal Spectrogram')
+subplot(3,1,3)
+spectrogram(t,PWM)                      % time versus PWM
+title('PWM SPectrogram')
