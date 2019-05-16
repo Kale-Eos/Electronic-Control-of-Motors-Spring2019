@@ -34,7 +34,7 @@ fTriP2 = mFreqP2*fSin;  % harmonic + 2
 fTriM2 = mFreqM2*fSin;  % harmonic - 2
 
 % Signal Outputs
-Vout_1 = mAmp*Vdc;              % Output voltage of the fundamental frequency of 1st harmonic
+Vout_1 = mAmp*Vdc;              % Output voltage of the fundamental frequency from 1st harmonic
 Vout_mFreq = mAmp_mFreq*Vdc;    % From target harmonic
 Vout_mFreq2 = mAmp_mFreq2*Vdc;  % From target harmonic +- 2
 
@@ -46,7 +46,7 @@ I_mFreqM2 = Vout_mFreq2/sqrt((RLoad^2)+((mFreqM2)*2*pi*fSin*LLoad)^2);  % From m
 I_1RMS = I_1/sqrt(2);                   % Current RMS from 1st harmonic
 I_mFreqRMS = I_mFreq/sqrt(2);           % From mFreq harmonic
 I_mFreqP2RMS = I_mFreqP2/sqrt(2);       % From mFreq harmonic + 2
-I_mFreqM2RMS = I_mFreqM2/sqrt(2);       % From mFreq harmonic -2
+I_mFreqM2RMS = I_mFreqM2/sqrt(2);       % From mFreq harmonic - 2
 
 P_1 = ((I_1RMS)^2)*RLoad;               % Power absorbed from 1st harmonic
 P_mFreq = ((I_mFreqRMS)^2)*RLoad;       % From mFreq harmonic
@@ -72,7 +72,6 @@ for i = 1:L
 end
 
 figure('Name','PWM Signal Generation and Output Representation'),figure(1)
-
 % Representation of the Sinusoidal Signal
 subplot(2,1,1)
 hold on, plot(t,Sin,'black','LineWidth',2)
@@ -111,7 +110,7 @@ Welch = pwelch(PWM);    % allocation of Welch's PSD estimate
 subplot(2,1,1)
 plot(Welch)             % Spectrum of PWelch returned values
 xlabel('Sample'), ylabel('Amplitude')
-title('PWM Power Spectral Density'), legend('Power Spectral Density')
+title('Power Spectral Density of PWM'), legend('Power Spectral Density')
 grid minor, box on
 
 PSD_Min = min(Welch);   % Power Spectral Density Absolute Min 
@@ -119,4 +118,4 @@ PSD_Max = max(Welch);   % Power Spectral Density Absolute Max
 
 subplot(2,1,2)
 spectrogram(t,PWM)                      % time versus PWM
-title('PWM Spectrogram')
+title('PWM Spectrogram (Re-shown for comparison)')
