@@ -4,25 +4,47 @@
 
 clc, clear all, close all;
 
-% Variables (temp values, change if needed)
+% Base Variables (temp values, change if needed)
 fs = 1000;          % sampling frequency
 dt = 1/fs;          % differentional of time
 t = 0:dt:1-dt;      % time interval and spacing
 
-Vdc = 120;          % Source Voltage
+Vdc = 100;          % Source Voltage
 RLoad = 10;         % Resistor Load
 LLoad = 20e-3;      % Inductor Load
 
-fTri = 120;         % Triangular frequency (amplitude)
-fSin = 120;         % Sinusoidal frequency (amplitude)
+% Signal Variables (temp values, change if needed)
+fTri = 1260;        % Triangular frequency (amplitude)
+fSin = 60;          % Sinusoidal frequency (amplitude)
 aTri = 10;          % amplitude of Triangular
-aSin = 10;          % amplitude of Sinusoidal -- less than value of aTri
-thetaTri = -pi/2;   % Triangular phase delay
-thetaSin = -pi/2;   % Triangular phase delay
+aSin = 8;           % amplitude of Sinusoidal -- less than value of aTri
+thetaTri = 0;       % Triangular phase delay
+thetaSin = 0;       % Triangular phase delay
 
 % Signal ratios 
-mF = fTri/fSin;     % frequency modulation ratio
-mA = aSin/aTri;     % amplitude modulation ratio
+mFreq = fTri/fSin;  % frequency modulation ratio
+mAmp = aSin/aTri;   % amplitude modulation ratio
+
+% Signal Outputs
+Vout1 = mAmp*Vdc;   % Output voltage of the fundamental frequency of 1st harmonic
+
+I_1 = Vout1/sqrt((RLoad^2)+(1*2*pi*fSin*LLoad)^2);                  % Current amplitude of 1st harmonic
+I_mFreq = Vout1/sqrt((RLoad^2)+(mFreq*2*pi*fSin*LLoad)^2);          % Current amplitude of mFreq value
+I_mFreqP2 = Vout1/sqrt((RLoad^2)+((mFreq+2)*2*pi*fSin*LLoad)^2);    % Current amplitude of mFreq value + 2
+I_mFreqM2 = Vout1/sqrt((RLoad^2)+((mFreq-2)*2*pi*fSin*LLoad)^2);    % Current amplitude of mFreq value - 2
+
+I_1RMS = I_1/sqrt(2);                       % Current RMS of 1st harmonic
+Pabs_1 = ((I_1RMS)^2)*RLoad;                % Power absorbed of 1st harmonic
+I_mFreqRMS = I_mFreq/sqrt(2);               % Current RMS of mFreq harmonic
+Pabs_mFreq = ((I_mFreqRMS)^2)*RLoad;        % Power absorbed of mFreq harmonic
+I_mFreqP2RMS = I_mFreqP2/sqrt(2);           % Current RMS of (mFreq+2) harmonic
+Pabs_mFreqP2 = ((I_mFreqP2RMS)^2)*RLoad;    % Power absorbed of (mFreq+2) harmonic
+I_mFreqM2RMS = I_mFreqM2/sqrt(2);           % Current RMS of (mFreq+2) harmonic
+Pabs_mFreqM2 = ((I_mFreqM2RMS)^2)*RLoad;    % Power absorbed of (mFreq-2) harmonic
+
+Pabs = Pabs_1 + Pabs_mFreq + Pabs_mFreqP2 + Pabs_mFreqM2;   % Total Power absorbed
+
+THD_1 = 100*((sqrt((I_mFreqRMS^2)+(I_mFreqP2RMS^2)+(I_mFreqM2RMS^2)))/I_1RMS);  % Total harmonic distortion of the load current
 
 % Actual Signals
 Tri = aTri.*sawtooth(2*pi*fTri*t+thetaTri);     % Triangular signal
@@ -30,7 +52,6 @@ Sin = aSin.*sin(2*pi*fSin*t+thetaSin);          % Sinusoidal signal
 L = length(Tri);
 
 % need to eval following:
-% V1 - amplitude of fundamental frequency
 % THD - total harmonic distortion
 % Power - reflective of load
 
