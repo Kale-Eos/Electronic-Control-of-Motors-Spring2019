@@ -4,10 +4,14 @@
 
 clc, clear all, close all;
 
-% Variables (temp values, change if must)
+% Variables (temp values, change if needed)
 fs = 1000;          % sampling frequency
 dt = 1/fs;          % differentional of time
 t = 0:dt:1-dt;      % time interval and spacing
+
+Vdc = 120;          % Source Voltage
+RLoad = 10;         % Resistor Load
+LLoad = 20e-3;      % Inductor Load
 
 fTri = 120;         % Triangular frequency (amplitude)
 fSin = 120;         % Sinusoidal frequency (amplitude)
@@ -26,12 +30,9 @@ Sin = aSin.*sin(2*pi*fSin*t+thetaSin);          % Sinusoidal signal
 L = length(Tri);
 
 % need to eval following:
-% Vdc - source voltage
 % V1 - amplitude of fundamental frequency
-% FundF
 % THD - total harmonic distortion
 % Power - reflective of load
-% R-load and L-Load for inverter based systems 
 
 % Simulation loop
 for i = 1:L
